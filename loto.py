@@ -119,11 +119,17 @@ with tab2:
         freq_combi = analyser_combinaisons(df, i)
         top_combis = freq_combi.most_common(n_top_combi)
 
+        st.write(f"##### Top {n_top_combi} des combinaisons de {i} numéros")
+        
+        # Affichage des top combinaisons principales en colonnes
+        cols = st.columns(n_top_combi)
         for idx, (combi, freq) in enumerate(top_combis):
-            #  Convert tuple to string for display
             combi_str = ', '.join(map(str, combi))
-            # Each column represents one top combination for the given number grouping
-            cols[idx].metric(f"Top {idx + 1} des combinaisons de {i} numéros", combi_str, f"{freq} fois")
+            cols[idx].metric(f"Top {idx + 1}", combi_str, f"{freq} fois")
+
+        # Dropdown pour sélectionner parmi 100 autres combinaisons spécifiques à cette taille de combinaison
+        options = [f"{', '.join(map(str, c))} ({f} fois)" for c, f in freq_combi.most_common(1000)]
+        selection = st.selectbox(f"Voir plus de combinaisons de {i} numéros", options, key=f'select_{i}')
 
     st.divider()
 
